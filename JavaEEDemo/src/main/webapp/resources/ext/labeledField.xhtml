@@ -1,0 +1,34 @@
+<html 
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:composite="http://java.sun.com/jsf/composite">
+
+	<composite:interface>
+		<composite:attribute
+			name="label"
+			required="true" />
+		<composite:attribute
+			name="forId"
+			required="true" />
+		<composite:attribute
+			name="style"
+			required="false"
+			default="" />
+	</composite:interface>
+	
+	<composite:implementation>
+		<div style="#{cc.attrs.style}">
+			<h:outputLabel 
+				for="#{cc.attrs.forId}" 
+				value="#{cc.attrs.label}:"/>
+			<composite:insertChildren />
+			<h:message 
+				for="#{cc.attrs.forId}" 
+				styleClass="error"
+				style="margin-left: 5px" />
+		</div>
+	</composite:implementation>
+	
+</html>

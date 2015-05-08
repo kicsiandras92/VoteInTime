@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ext="http://java.sun.com/jsf/composite/ext"
+	xmlns:p="http://primefaces.org/ui"
+	template="/templates/default.xhtml">
+	
+	<f:metadata>
+		<f:viewParam
+			name="id" 
+			value="#{patientAction.id}" />
+		<f:event 
+			type="preRenderView"
+			listener="#{patientAction.load()}" />
+	</f:metadata>
+	
+	<ui:define name="content">
+	
+		<h1>#{empty patientAction.id ? 'Új beteg felvétele' : 'Beteg adatainak szerkesztése'}</h1>
+		
+		<h:form id="patientEditForm">
+			
+			<ext:labeledField 
+				forId="patientName" 
+				label="Név">
+				<p:inputText 
+					id="patientName" 
+					value="#{patientAction.entity.name}"
+					required="true" />
+			</ext:labeledField>
+			
+			<ext:labeledField 
+				forId="patientBirthDate" 
+				label="Születési dátum">
+				<p:calendar
+					id="patientBirthDate" 
+					value="#{patientAction.entity.birthDate}"
+					pattern="yyyy. MM. dd."
+					required="true" />
+			</ext:labeledField>
+			
+			<ext:labeledField 
+				forId="patientCountry" 
+				label="Ország">
+				<p:inputText 
+					id="patientCountry" 
+					value="#{patientAction.entity.address.country}"
+					required="true" />
+			</ext:labeledField>
+			
+			<ext:labeledField 
+				forId="patientCity" 
+				label="Város">
+				<p:inputText 
+					id="patientCity" 
+					value="#{patientAction.entity.address.city}"
+					required="true" />
+			</ext:labeledField>
+			
+			<ext:labeledField 
+				forId="patientStreet" 
+				label="Utca">
+				<p:inputText 
+					id="patientStreet" 
+					value="#{patientAction.entity.address.street}"
+					required="true" />
+			</ext:labeledField>
+			
+			<ext:labeledField 
+				forId="patientNumber" 
+				label="Házszám">
+				<p:inputText 
+					id="patientNumber" 
+					value="#{patientAction.entity.address.number}"
+					required="true" />
+			</ext:labeledField>
+			
+			<h:commandLink
+				value="Mentés" 
+				action="#{patientAction.persist()}" />
+				
+			<h:link
+				value="Vissza"
+				outcome="/content/patient/list" />
+		
+		</h:form>
+
+	</ui:define>
+</ui:composition>

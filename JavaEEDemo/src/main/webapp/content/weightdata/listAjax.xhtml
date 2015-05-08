@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ext="http://java.sun.com/jsf/composite/ext"
+	template="/templates/default.xhtml">
+	
+	<f:metadata>
+		<f:event 
+			type="preRenderView"
+			listener="#{patientDataModel.load()}" />
+		<f:event 
+			type="preRenderView"
+			listener="#{weightDataModel.load()}" />
+	</f:metadata>
+	
+	<ui:define name="content">
+	
+		<h1>Testsúly mérési adatok listája</h1>
+
+		<h:form id="weightDataListForm">
+		
+			<ext:labeledField 
+				forId="patientSelector" 
+				label="Beteg"
+				style="margin-bottom: 10px">
+				<h:selectOneMenu
+					id="patientSelector"
+					value="#{selectedPatientContainer.selectedPatient}"
+					converter="#{entityConverter}">
+					<f:selectItem itemLabel="Nincs beteg kiválasztva" />
+					<f:selectItems
+						value="#{patientDataModel.list}"
+						var="patient"
+						itemLabel="#{patient.name}"
+						itemValue="#{patient}" />
+					<f:ajax 
+						event="change"
+						listener="#{weightDataModel.load()}"
+						execute="@this"
+						render=":weightDataListForm:weightDataTable" />
+				</h:selectOneMenu>
+			</ext:labeledField>
+			
+			<div>
+				<h:outputText
+					value="Még nem vettek fel mérési adatot az adatbázisba"
+					rendered="#{empty weightDataModel.list}" />
+			</div>
+			
+			<h:dataTable 
+				id="weightDataTable"
+				value="#{weightDataModel.list}"
+				var="weightData"
+				rendered="#{not empty weightDataModel.list}"
+				styleClass="simpletablestyle">
+				
+				<h:column rendered="#{empty selectedPatientContainer.selectedPatient}">
+					<f:facet name="header">Beteg</f:facet>
+					<h:outputText value="#{weightData.patient.name}" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">Testúly</f:facet>
+					<h:outputText value="#{weightData.weight}">
+						<f:convertNumber />
+					</h:outputText>
+					<h:outputText value=" kg" />
+				</h:column>
+				
+				<h:column>
+					<f:facet name="header">Mérés dátuma</f:facet>
+					<h:outputText value="#{weightData.date}">
+						<f:convertDateTime pattern="yyyy. MM. dd. HH:mm:ss" />
+					</h:outputText>
+				</h:column>
+			
+			</h:dataTable>
+			
+			<h:link
+				value="Vissza"
+				outcome="/index" />
+				
+		</h:form>
+
+	</ui:define>
+</ui:composition>
